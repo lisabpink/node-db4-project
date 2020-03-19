@@ -1,7 +1,28 @@
-const server = require('./server.js');
+const express = require("express"); //commonJS modules
 
-const PORT = process.env.PORT || 5000;
+const Database = require("./data/db.js");
 
-server.listen(PORT, () => {
-  console.log(`Listening on port ${PORT}...`);
-}); 
+const server = express();
+
+server.use(express.json()); //needed for POST and PUT/PATCH teaches express how to read JSON from the body
+
+server.get("/", (req, res) => {
+  res.json({ hello: "beautiful people!" });
+});
+
+//view a list of database
+server.get("/api/database", (req, res) => {
+  //go and get the Database from the database
+  Database.find()
+    .then(database => {
+      res.status(200).json(database);
+    })
+    .catch(err => {
+      console.log(err);
+      res.status(500).json({ errorMessage: "opps" });
+    });
+
+});
+
+const port = 8000;
+server.listen(port, () => console.log(`\n** API on port ${port} \n`));
