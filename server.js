@@ -1,13 +1,13 @@
-const express = require('express'); // import the express package
+const express = require('express');
+const helmet = require('helmet');
 
-const server = express(); // creates the server
+const recipeRouter = require('../recipes/recipes-router.js');
 
-// handle requests to the root of the api, the / route
-server.get('/', (req, res) => {
-  res.send('Hellooooo from Express');
-});
+const server = express();
 
-// watch for connections on port 5000
-server.listen(8000, () =>
-  console.log('Server running on http://localhost:8000')
-);
+server.use(helmet());
+server.use(express.json());
+
+server.use('/api/recipes', recipeRouter);
+
+module.exports = server;
